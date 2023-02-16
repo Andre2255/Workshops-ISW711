@@ -10,7 +10,7 @@ const playerShema = mongoose.Schema(
     },
     team: {
         type: Team.schema,
-        
+        required: false
     }
   },
   {

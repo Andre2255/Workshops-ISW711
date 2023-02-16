@@ -6,7 +6,8 @@ const app = express();
 app.use(express.json());
 dotenv.config();
 
-app.use('/api/teams', addTeam)
+app.use('/api/teams', addTeam);
+
 
 conectarBD();
 const PORT = process.env.PORT || 4000;

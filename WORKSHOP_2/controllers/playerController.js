@@ -11,8 +11,16 @@ const infoPlayer = (req, res) => {
 
 const addPlayer = async (req, res) => {
   try {
+    if(req.body.team){
+      const team = await Team.model.findById(req.body.team);
+      if(team){
+        req.body.team = team;
+      }else{
+        res.status(422).json({"msj": "Team no encontrado"})
+      }
+    }
     const player = new Player.model(req.body);
-
+    
     const playerAlmacenado = await player.save();
     res.json(playerAlmacenado);
   } catch (error) {
@@ -22,7 +30,7 @@ const addPlayer = async (req, res) => {
 
 const deletePlayer = async (req, res) => {
   const playerId = req.params.id;
-  const player = await Player.findById(playerId);
+  const player = await Player.model.findById(playerId);
   if(!player) {
     res.status(404).json({msg: "No encontrado"})
   }
@@ -39,12 +47,12 @@ const deletePlayer = async (req, res) => {
 
 const editPlayer = async (req, res) => {
     const playerId = req.params.id;
-    const player = await Player.findById(playerId);
+    const player = await Player.model.findById(playerId);
     if(!player) {
       res.status(404).json({msg: "No encontrado"})
     }
     player.nombre = req.body.nombre || player.nombre;
-    player.mundiales_ganadas = req.body.mundiales_ganadas || player.mundiales_ganadas;
+    player.team = req.body.Team || player.Team;
     try {
       const playerAlmacenado = await player.save();
       res.json(playerAlmacenado);
